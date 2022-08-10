@@ -11,9 +11,7 @@ const ReportsPage = () => {
   const [reports, setReports] = useState([]);
 
   useEffect(() => {
-    const endpoints = ["/report-groups", "/reports"];
-
-    axios.all(endpoints.map((endpoint) => api.get(endpoint))).then(
+    axios.all([api.get("/report-groups"), api.get("/reports")]).then(
       axios.spread((reportGroupsResponse, reportsResponse) => {
         setReportGroups(reportGroupsResponse.data);
         setReports(reportsResponse.data);
