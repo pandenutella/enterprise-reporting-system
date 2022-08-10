@@ -1,12 +1,8 @@
 import { Alert } from "antd";
-import Head from "next/head";
 import clientPromise from "../lib/mongodb";
 
 const HomePage = ({ connected }) => (
   <>
-    <Head>
-      <title>Enterprise Reporting System</title>
-    </Head>
     {connected && (
       <Alert type="success" banner message="Connected to MongoDB" />
     )}
