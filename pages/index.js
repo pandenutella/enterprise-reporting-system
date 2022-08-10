@@ -1,11 +1,9 @@
-import { Alert } from "antd";
+import ConnectionAlert from "../components/ConnectionAlert";
 import clientPromise from "../lib/mongodb";
 
 const HomePage = ({ connected }) => (
   <>
-    {connected && (
-      <Alert type="success" banner message="Connected to MongoDB" />
-    )}
+    <ConnectionAlert connected={connected} />
   </>
 );
 
