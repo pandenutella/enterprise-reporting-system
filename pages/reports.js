@@ -1,23 +1,12 @@
 import { Col, Row } from "antd";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import api from "../axios";
 import ReportFilter from "../components/report/ReportFilter";
 import ReportGroup from "../components/report/ReportGroup";
 
-const ReportsPage = () => {
+const ReportsPage = ({ reportGroups, reports }) => {
   const [filter, setFilter] = useState("");
-  const [reportGroups, setReportGroups] = useState([]);
-  const [reports, setReports] = useState([]);
-
-  useEffect(() => {
-    axios.all([api.get("/report-groups"), api.get("/reports")]).then(
-      axios.spread((reportGroupsResponse, reportsResponse) => {
-        setReportGroups(reportGroupsResponse.data);
-        setReports(reportsResponse.data);
-      })
-    );
-  }, []);
 
   return (
     <Row style={{ paddingTop: 20, paddingBottom: 20 }}>
@@ -51,6 +40,23 @@ const ReportsPage = () => {
       <Col flex="auto" />
     </Row>
   );
+};
+
+export const getServerSideProps = async () => {
+  const [reportGroupsResponse, reportsResponse] = await axios.all([
+    api.get("/report-groups"),
+    api.get("/reports"),
+  ]);
+
+  const reportGroups = reportGroupsResponse.data;
+  const reports = reportsResponse.data;
+
+  return {
+    props: {
+      reportGroups,
+      reports,
+    },
+  };
 };
 
 export default ReportsPage;
