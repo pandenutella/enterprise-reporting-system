@@ -7,7 +7,7 @@ const DynamicIcon = ({ name, color }) => {
     return React.lazy(() =>
       import(`@ant-design/icons/es/icons/${name}${type}.js`)
     );
-  }, [name]);
+  }, [name, type]);
 
   return (
     <Suspense fallback={<></>}>

@@ -27,7 +27,7 @@ const ReportField = ({ field }) => {
         <Field field={field} />
       ) : (
         <Typography.Text italic>
-          (Unsupported field type "{field.type}")
+          (Unsupported field type &quot;{field.type}&quot;)
         </Typography.Text>
       )}
     </Form.Item>
