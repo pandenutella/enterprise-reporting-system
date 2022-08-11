@@ -9,9 +9,13 @@ const handler = async (req, res) => {
   if (!report)
     return res.status(404).json({ message: `Report ${key} does not exist!` });
 
-  const fields = [];
+  const fields = await db
+    .collection("reportFields")
+    .find({ reportKey: key })
+    .sort({ sequence: 1 })
+    .toArray();
 
-  return res.json({ report, fields });
+  return res.json({ ...report, fields });
 };
 
 export default handler;

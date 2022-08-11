@@ -6,7 +6,9 @@ import api from "../../axios";
 import ReportForm from "../../components/report/ReportForm";
 
 const getReportDisplayName = (key, report) =>
-  report?.name ?? "Enterprise Reporting System - " + key;
+  report?.name
+    ? `${report.key} - ${report.name}`
+    : `Enterprise Reporting System - ${key}`;
 
 const ReportPage = ({ report, reportGroup }) => {
   const router = useRouter();
