@@ -9,33 +9,27 @@ const ReportsPage = ({ reportGroups, reports }) => {
   const [filter, setFilter] = useState("");
 
   return (
-    <Row style={{ paddingTop: 20, paddingBottom: 20 }}>
+    <Row>
       <Col flex="auto" />
       <Col flex="700px">
-        <Row gutter={[20]}>
-          <Col span={24}>
-            <ReportFilter filter={filter} onFilter={setFilter} />
-          </Col>
-          <Col span={24}>
-            {reportGroups.map((reportGroup) => {
-              const filteredReports = reports
-                .filter((report) => report.groupKey === reportGroup.key)
-                .filter(
-                  (report) =>
-                    report.key.toUpperCase().includes(filter.toUpperCase()) ||
-                    report.name.toUpperCase().includes(filter.toUpperCase())
-                );
+        <ReportFilter filter={filter} onFilter={setFilter} />
+        {reportGroups.map((reportGroup) => {
+          const filteredReports = reports
+            .filter((report) => report.groupKey === reportGroup.key)
+            .filter(
+              (report) =>
+                report.key.toUpperCase().includes(filter.toUpperCase()) ||
+                report.name.toUpperCase().includes(filter.toUpperCase())
+            );
 
-              return (
-                <ReportGroup
-                  key={reportGroup.key}
-                  reportGroup={reportGroup}
-                  reports={filteredReports}
-                />
-              );
-            })}
-          </Col>
-        </Row>
+          return (
+            <ReportGroup
+              key={reportGroup.key}
+              reportGroup={reportGroup}
+              reports={filteredReports}
+            />
+          );
+        })}
       </Col>
       <Col flex="auto" />
     </Row>

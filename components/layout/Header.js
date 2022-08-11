@@ -16,7 +16,13 @@ const items = [
 ];
 
 const Header = () => (
-  <Layout.Header>
+  <Layout.Header
+    style={{
+      position: "fixed",
+      zIndex: 1,
+      width: "100%",
+    }}
+  >
     <Menu theme="dark" mode="horizontal" selectedKeys={[]} items={items} />
   </Layout.Header>
 );

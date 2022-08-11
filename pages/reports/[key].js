@@ -19,35 +19,27 @@ const ReportPage = ({ report, reportGroup }) => {
       <Head>
         <title>{getReportDisplayName(key, report)}</title>
       </Head>
-      <div style={{ padding: 20 }}>
-        <Row gutter={20}>
-          <Col flex="auto"></Col>
-          <Col flex="600px">
-            <Row gutter={20}>
-              <Col span={24}>
-                <Breadcrumb style={{ marginBottom: 10 }}>
-                  <Breadcrumb.Item>
-                    <Link href="/reports">Reports</Link>
-                  </Breadcrumb.Item>
-                  <Breadcrumb.Item>
-                    {reportGroup?.name ?? (
-                      <Typography.Text disabled>Unknown Group</Typography.Text>
-                    )}
-                  </Breadcrumb.Item>
-                </Breadcrumb>
-              </Col>
-              <Col span={24}>
-                <ReportForm
-                  reportKey={key}
-                  report={report}
-                  reportGroup={reportGroup}
-                />
-              </Col>
-            </Row>
-          </Col>
-          <Col flex="auto"></Col>
-        </Row>
-      </div>
+      <Row>
+        <Col flex="auto"></Col>
+        <Col flex="700px">
+          <Breadcrumb style={{ marginBottom: 10 }}>
+            <Breadcrumb.Item>
+              <Link href="/reports">Reports</Link>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              {reportGroup?.name ?? (
+                <Typography.Text disabled>Unknown Group</Typography.Text>
+              )}
+            </Breadcrumb.Item>
+          </Breadcrumb>
+          <ReportForm
+            reportKey={key}
+            report={report}
+            reportGroup={reportGroup}
+          />
+        </Col>
+        <Col flex="auto"></Col>
+      </Row>
     </>
   );
 };
