@@ -6,7 +6,7 @@ const ReportGroup = ({ reportGroup, reports }) => (
     <Divider orientation="left">
       <Space>{reportGroup.name}</Space>
     </Divider>
-    <Row gutter={20}>
+    <Row gutter={[20, 20]}>
       {reports.map((report) => (
         <Col key={report.key}>
           <ReportCard report={report} />
