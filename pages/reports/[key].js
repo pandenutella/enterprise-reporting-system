@@ -34,11 +34,14 @@ const ReportPage = ({ report, reportGroup }) => {
                       <Typography.Text disabled>Unknown Group</Typography.Text>
                     )}
                   </Breadcrumb.Item>
-                  <Breadcrumb.Item>{key}</Breadcrumb.Item>
                 </Breadcrumb>
               </Col>
               <Col span={24}>
-                <ReportForm report={report} />
+                <ReportForm
+                  reportKey={key}
+                  report={report}
+                  reportGroup={reportGroup}
+                />
               </Col>
             </Row>
           </Col>

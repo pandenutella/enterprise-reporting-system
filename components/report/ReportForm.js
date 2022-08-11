@@ -1,6 +1,7 @@
-import { Button, Card, Col, Form, Row, Space } from "antd";
+import { Button, Card, Col, Form, Row, Space, Typography } from "antd";
 import ReportNotFoundResult from "../result/ReportNotFoundResult";
 import ReportUnderDevelopmentResult from "../result/ReportUnderDevelopmentResult";
+import DynamicIcon from "./DynamicIcon";
 import ReportField from "./ReportField";
 
 const renderColumn = (key, field) => (
@@ -45,26 +46,39 @@ const renderFormButtons = () => (
   </Space>
 );
 
-const getReportDisplayName = (key, report) => report?.name ?? key;
+const getReportDisplayName = (key, report, reportGroup) => {
+  if (!report?.name) return key;
 
-const ReportForm = ({ key, report }) => {
+  return (
+    <Space>
+      <DynamicIcon name={reportGroup.icon} color={reportGroup.color} />
+      <Typography.Text>{report.name}</Typography.Text>
+    </Space>
+  );
+};
+
+const ReportForm = ({ reportKey, report, reportGroup }) => {
+  if (!report)
+    return (
+      <Card size="small">
+        <ReportNotFoundResult />
+      </Card>
+    );
+
   const handleSubmit = (values) => {
     console.log(values);
   };
 
   const renderContent = () => {
-    if (!report) return <ReportNotFoundResult />;
+    if (!report.fields.length) return <ReportUnderDevelopmentResult />;
 
-    if (report.fields.length)
-      return <Row gutter={20}>{renderColumns(report.fields)}</Row>;
-
-    return <ReportUnderDevelopmentResult />;
+    return <Row gutter={20}>{renderColumns(report.fields)}</Row>;
   };
 
   return (
     <Form layout="vertical" onFinish={handleSubmit}>
       <Card
-        title={getReportDisplayName(key, report)}
+        title={getReportDisplayName(reportKey, report, reportGroup)}
         size="small"
         extra={report?.fields?.length ? renderFormButtons() : []}
       >

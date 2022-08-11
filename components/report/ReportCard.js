@@ -1,16 +1,12 @@
-import { Badge, Card, Typography } from "antd";
+import { Card, Typography } from "antd";
 import Link from "next/link";
 
-const ReportCard = ({ report, reportGroup }) => (
-  <Badge.Ribbon color={reportGroup.color} text={report.key}>
-    <Link href={`/reports/${report.key}`}>
-      <Card size="small" hoverable>
-        <Typography.Text style={{ paddingRight: 50 }}>
-          {report.name}
-        </Typography.Text>
-      </Card>
-    </Link>
-  </Badge.Ribbon>
+const ReportCard = ({ report }) => (
+  <Link href={`/reports/${report.key}`}>
+    <Card size="small" hoverable>
+      <Typography.Text>{report.name}</Typography.Text>
+    </Card>
+  </Link>
 );
 
 export default ReportCard;
