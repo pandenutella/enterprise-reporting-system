@@ -2,6 +2,7 @@ import { Breadcrumb, Col, Row, Typography } from "antd";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import api from "../../axios";
 import ReportForm from "../../components/report/ReportForm";
 
 const getReportDisplayName = (key, report) =>
@@ -46,11 +47,21 @@ const ReportPage = ({ report, reportGroup }) => {
   );
 };
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async (context) => {
+  const { key } = context.query;
+
+  let report = null;
+  let reportGroup = null;
+
+  try {
+    report = (await api.get(`/reports/${key}`))?.data;
+    reportGroup = (await api.get(`/report-groups/${report.group}`))?.data;
+  } catch (error) {}
+
   return {
     props: {
-      report: null,
-      reportGroup: null,
+      report,
+      reportGroup,
     },
   };
 };
