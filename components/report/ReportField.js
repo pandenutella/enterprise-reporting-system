@@ -1,11 +1,18 @@
 import { Form, Typography } from "antd";
+import Checkbox from "./field/Checkbox";
+import Dropdown from "./field/Dropdown";
+import Textbox from "./field/Textbox";
 
-const fieldMapping = {};
+const fieldMapping = {
+  Checkbox: Checkbox,
+  Dropdown: Dropdown,
+  Textbox: Textbox,
+};
 
 const ReportField = ({ field }) => {
   const rules = [];
   if (field.validations?.required)
-    rules.push({ required: true, message: `${field.label} is required` });
+    rules.push({ required: true, message: "This field is required" });
 
   const Field = fieldMapping[field.type];
 
