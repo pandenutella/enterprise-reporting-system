@@ -11,7 +11,7 @@ const handler = async (req, res) => {
       .status(404)
       .json({ message: `Report Group ${key} does not exist!` });
 
-  return res.status(200).json(reportGroup);
+  return res.json(reportGroup);
 };
 
 export default handler;
