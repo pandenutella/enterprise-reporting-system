@@ -1,9 +1,9 @@
 import { Col, Row } from "antd";
 import axios from "axios";
 import { useState } from "react";
-import api from "../axios";
-import ReportFilter from "../components/report/ReportFilter";
-import ReportGroup from "../components/report/ReportGroup";
+import api from "../../axios";
+import ReportFilter from "../../components/report/ReportFilter";
+import ReportGroup from "../../components/report/ReportGroup";
 
 const ReportsPage = ({ reportGroups, reports }) => {
   const [filter, setFilter] = useState("");
