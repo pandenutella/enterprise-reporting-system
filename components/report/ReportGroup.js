@@ -9,7 +9,7 @@ const ReportGroup = ({ reportGroup, reports }) => (
     <Row gutter={[20, 20]}>
       {reports.map((report) => (
         <Col key={report.key}>
-          <ReportCard report={report} />
+          <ReportCard report={report} reportGroup={reportGroup} />
         </Col>
       ))}
     </Row>
