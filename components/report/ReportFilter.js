@@ -2,9 +2,7 @@ import { FilterOutlined } from "@ant-design/icons";
 import { Input } from "antd";
 
 const ReportFilter = ({ filter, onFilter }) => {
-  const handleChange = (event) => {
-    onFilter(event.target.value);
-  };
+  const handleChange = (event) => onFilter(event.target.value);
 
   return (
     <Input
@@ -12,7 +10,7 @@ const ReportFilter = ({ filter, onFilter }) => {
       value={filter}
       onChange={handleChange}
       allowClear
-      prefix={<FilterOutlined />}
+      prefix={<FilterOutlined style={{ marginRight: 4 }} />}
     />
   );
 };
