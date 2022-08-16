@@ -5,10 +5,20 @@ import api from "../../axios";
 import ReportFilter from "../../components/report/ReportFilter";
 import ReportGroup from "../../components/report/ReportGroup";
 import ReportGroups from "../../components/report/ReportGroups";
+import ReportSubmissions from "../../components/report/ReportSubmissions";
 import NoReportsResult from "../../components/result/NoReportsResult";
+import useReportSubmissions from "../../hooks/useReportSubmissions";
 
-const ReportsPage = ({ reportGroups, reports, recentReports }) => {
+const ReportsPage = ({
+  reportGroups,
+  reports,
+  recentReports,
+  reportSubmissions: reportSubmissionsProp,
+}) => {
   const [filter, setFilter] = useState("");
+  const { reportSubmissions, fetching } = useReportSubmissions(
+    reportSubmissionsProp
+  );
 
   const filteredReports = reports.filter(
     (report) =>
@@ -50,12 +60,22 @@ const ReportsPage = ({ reportGroups, reports, recentReports }) => {
   return (
     <Row>
       <Col flex="auto" />
-      <Col flex="700px">
-        <Space direction="vertical" style={{ width: "100%" }}>
-          <ReportFilter filter={filter} onFilter={setFilter} />
-          {renderRecent()}
-          {renderResults()}
-        </Space>
+      <Col flex="1000px">
+        <Row gutter={[20, 20]}>
+          <Col flex="650px">
+            <Space direction="vertical" style={{ width: "100%" }}>
+              <ReportFilter filter={filter} onFilter={setFilter} />
+              {renderRecent()}
+              {renderResults()}
+            </Space>
+          </Col>
+          <Col flex="350px">
+            <ReportSubmissions
+              reportSubmissions={reportSubmissions}
+              fetching={fetching}
+            />
+          </Col>
+        </Row>
       </Col>
       <Col flex="auto" />
     </Row>
@@ -63,14 +83,21 @@ const ReportsPage = ({ reportGroups, reports, recentReports }) => {
 };
 
 export const getServerSideProps = async () => {
-  const [reportGroupsResponse, reportsResponse, recentReportKeysResponse] =
-    await axios.all([
-      api.get("/report-groups"),
-      api.get("/reports"),
-      api.get("/report-submissions/recent-report-keys", {
-        params: { userId: "PDN", top: 3 },
-      }),
-    ]);
+  const userId = "PDN";
+
+  const [
+    reportGroupsResponse,
+    reportsResponse,
+    recentReportKeysResponse,
+    reportSubmissionsResponse,
+  ] = await axios.all([
+    api.get("/report-groups"),
+    api.get("/reports"),
+    api.get("/report-submissions/recent-report-keys", {
+      params: { userId, top: 3 },
+    }),
+    api.get("/report-submissions", { params: { userId } }),
+  ]);
 
   const reportGroups = reportGroupsResponse.data;
   const reports = reportsResponse.data;
@@ -80,11 +107,14 @@ export const getServerSideProps = async () => {
     reports.find((report) => report.key === reportKey)
   );
 
+  const reportSubmissions = reportSubmissionsResponse.data;
+
   return {
     props: {
       reportGroups,
       reports,
       recentReports,
+      reportSubmissions,
     },
   };
 };

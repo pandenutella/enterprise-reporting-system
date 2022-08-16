@@ -5,6 +5,15 @@ const handler = async (req, res) => {
   const db = await dbPromise;
 
   switch (req.method) {
+    case "GET":
+      const reportSubmissions = await db
+        .collection("reportSubmissions")
+        .find({ userId: req.query.userId })
+        .sort({ dateSubmitted: -1 })
+        .toArray();
+
+      return res.json(reportSubmissions);
+
     case "POST":
       const userId = "PDN";
       const { reportKey, parameters } = req.body;
@@ -28,7 +37,7 @@ const handler = async (req, res) => {
         return res.status(201).json(reportSubmission);
       });
     default:
-      break;
+      return res.send();
   }
 };
 
