@@ -51,7 +51,9 @@ export const getServerSideProps = async (context) => {
   let reportGroup = null;
 
   try {
-    report = (await api.get(`/reports/${key}`))?.data;
+    report = (
+      await api.get(`/reports/${key}`, { params: { includeFields: true } })
+    )?.data;
     reportGroup = (await api.get(`/report-groups/${report.groupKey}`))?.data;
   } catch (error) {}
 

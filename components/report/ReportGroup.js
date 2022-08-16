@@ -6,7 +6,9 @@ const ReportGroup = ({ reportGroup, reports }) => (
   <>
     <Divider orientation="left">
       <Space>
-        <DynamicIcon name={reportGroup.icon} color={reportGroup.color} />
+        {reportGroup.icon && (
+          <DynamicIcon name={reportGroup.icon} color={reportGroup.color} />
+        )}
         {reportGroup.name}
       </Space>
     </Divider>
