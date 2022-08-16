@@ -1,4 +1,6 @@
-import { Button, Card, Col, Form, Row, Space, Typography } from "antd";
+import { Button, Card, Col, Form, message, Row, Space, Typography } from "antd";
+import { useState } from "react";
+import api from "../../axios";
 import ReportNotFoundResult from "../result/ReportNotFoundResult";
 import ReportUnderDevelopmentResult from "../result/ReportUnderDevelopmentResult";
 import DynamicIcon from "./DynamicIcon";
@@ -37,10 +39,17 @@ const renderColumns = (fields) => {
   return columnFields;
 };
 
-const renderFormButtons = () => (
+const renderFormButtons = (submitting) => (
   <Space>
-    <Button htmlType="reset">Reset</Button>
-    <Button type="primary" htmlType="submit">
+    <Button htmlType="reset" disabled={submitting}>
+      Reset
+    </Button>
+    <Button
+      type="primary"
+      htmlType="submit"
+      loading={submitting}
+      disabled={submitting}
+    >
       Submit
     </Button>
   </Space>
@@ -58,6 +67,8 @@ const getReportDisplayName = (key, report, reportGroup) => {
 };
 
 const ReportForm = ({ reportKey, report, reportGroup }) => {
+  const [submitting, setSubmitting] = useState(false);
+
   if (!report)
     return (
       <Card size="small">
@@ -66,7 +77,26 @@ const ReportForm = ({ reportKey, report, reportGroup }) => {
     );
 
   const handleSubmit = (values) => {
-    console.log(values);
+    setSubmitting(true);
+
+    const reportSubmission = {
+      reportKey,
+      parameters: {
+        event: values.event,
+        date: values.date,
+        remarks: values.remarks ?? null,
+        withNegative: values.withNegative,
+      },
+    };
+
+    api
+      .post("/report-submissions", reportSubmission)
+      .then((response) => {
+        message.success(
+          `Your ${reportKey} submission has been saved as ${response.data.key}.`
+        );
+      })
+      .finally(() => setSubmitting(false));
   };
 
   const renderContent = () => {
@@ -80,7 +110,7 @@ const ReportForm = ({ reportKey, report, reportGroup }) => {
       <Card
         title={getReportDisplayName(reportKey, report, reportGroup)}
         size="small"
-        extra={report?.fields?.length ? renderFormButtons() : []}
+        extra={report?.fields?.length ? renderFormButtons(submitting) : []}
       >
         {renderContent()}
       </Card>
