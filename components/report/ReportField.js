@@ -1,10 +1,12 @@
 import { Form, Typography } from "antd";
 import Checkbox from "./field/Checkbox";
+import DatePicker from "./field/DatePicker";
 import Dropdown from "./field/Dropdown";
 import Textbox from "./field/Textbox";
 
 const fieldMapping = {
   Checkbox: Checkbox,
+  DatePicker: DatePicker,
   Dropdown: Dropdown,
   Textbox: Textbox,
 };
