@@ -66,7 +66,7 @@ const getReportDisplayName = (key, report, reportGroup) => {
   );
 };
 
-const ReportForm = ({ reportKey, report, reportGroup }) => {
+const ReportForm = ({ reportKey, report, reportGroup, onSubmit }) => {
   const [submitting, setSubmitting] = useState(false);
 
   if (!report)
@@ -79,7 +79,7 @@ const ReportForm = ({ reportKey, report, reportGroup }) => {
   const handleSubmit = (values) => {
     setSubmitting(true);
 
-    const reportSubmission = {
+    const reportSubmissionRequest = {
       reportKey,
       parameters: {
         event: values.event,
@@ -90,11 +90,15 @@ const ReportForm = ({ reportKey, report, reportGroup }) => {
     };
 
     api
-      .post("/report-submissions", reportSubmission)
+      .post("/report-submissions", reportSubmissionRequest)
       .then((response) => {
+        const reportSubmission = response.data;
+        console.log(reportSubmission);
+
         message.success(
-          `Your ${reportKey} submission has been saved as ${response.data.key}.`
+          `Your ${reportKey} report has been submitted successfully with key "${reportSubmission.key}".`
         );
+        onSubmit(reportSubmission);
       })
       .finally(() => setSubmitting(false));
   };

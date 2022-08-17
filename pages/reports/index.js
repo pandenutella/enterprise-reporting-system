@@ -1,4 +1,4 @@
-import { Col, Row, Space } from "antd";
+import { Breadcrumb, Col, Row, Space } from "antd";
 import axios from "axios";
 import { useState } from "react";
 import api from "../../axios";
@@ -7,6 +7,7 @@ import ReportGroup from "../../components/report/ReportGroup";
 import ReportGroups from "../../components/report/ReportGroups";
 import ReportSubmissions from "../../components/report/ReportSubmissions";
 import NoReportsResult from "../../components/result/NoReportsResult";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
 import useReportSubmissions from "../../hooks/useReportSubmissions";
 
 const ReportsPage = ({
@@ -16,9 +17,10 @@ const ReportsPage = ({
   reportSubmissions: reportSubmissionsProp,
 }) => {
   const [filter, setFilter] = useState("");
-  const { reportSubmissions, fetching } = useReportSubmissions(
+  const { reportSubmissions, fetching, fetch } = useReportSubmissions(
     reportSubmissionsProp
   );
+  useAutoRefresh(() => fetch());
 
   const filteredReports = reports.filter(
     (report) =>
@@ -61,6 +63,9 @@ const ReportsPage = ({
     <Row>
       <Col flex="auto" />
       <Col flex="1000px">
+        <Breadcrumb style={{ marginBottom: 10 }}>
+          <Breadcrumb.Item>Reports</Breadcrumb.Item>
+        </Breadcrumb>
         <Row gutter={[20, 20]}>
           <Col flex="650px">
             <Space direction="vertical" style={{ width: "100%" }}>

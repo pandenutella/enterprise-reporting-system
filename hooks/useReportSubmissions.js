@@ -14,6 +14,13 @@ const useReportSubmissions = (initialValue) => {
       .finally(setFetching(false));
   };
 
+  const add = (reportSubmission) => {
+    setReportSubmissions((previousState) => [
+      reportSubmission,
+      ...previousState,
+    ]);
+  };
+
   useEffect(() => {
     if (initialValue) {
       setReportSubmissions(initialValue);
@@ -28,6 +35,7 @@ const useReportSubmissions = (initialValue) => {
     reportSubmissions,
     fetching,
     fetch,
+    add,
   };
 };
 

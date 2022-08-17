@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import api from "../../axios";
 import ReportForm from "../../components/report/ReportForm";
 import ReportSubmissions from "../../components/report/ReportSubmissions";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
 import useReportSubmissions from "../../hooks/useReportSubmissions";
 
 const getReportDisplayName = (key, report) =>
@@ -19,9 +20,12 @@ const ReportPage = ({
 }) => {
   const router = useRouter();
   const { key } = router.query;
-  const { reportSubmissions, fetching } = useReportSubmissions(
+  const { reportSubmissions, fetching, fetch, add } = useReportSubmissions(
     reportSubmissionsProp
   );
+  useAutoRefresh(() => fetch());
+
+  const handleSubmit = (reportSubmission) => add(reportSubmission);
 
   return (
     <>
@@ -47,6 +51,7 @@ const ReportPage = ({
                 reportKey={key}
                 report={report}
                 reportGroup={reportGroup}
+                onSubmit={handleSubmit}
               />
             </Col>
             <Col flex="350px">
@@ -75,9 +80,11 @@ export const getServerSideProps = async (context) => {
       await api.get(`/reports/${key}`, { params: { includeFields: true } })
     )?.data;
     reportGroup = (await api.get(`/report-groups/${report.groupKey}`))?.data;
-    reportSubmissions = await api.get("/report-submissions", {
-      params: { userId: "PDN" },
-    });
+    reportSubmissions = (
+      await api.get("/report-submissions", {
+        params: { userId: "PDN" },
+      })
+    ).data;
   } catch (error) {}
 
   return {

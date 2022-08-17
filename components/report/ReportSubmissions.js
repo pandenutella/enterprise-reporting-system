@@ -24,6 +24,7 @@ const ReportSubmissions = ({ reportSubmissions, fetching }) => {
           </List.Item>
         )}
         loading={fetching}
+        locale={{ emptyText: "No submissions yet" }}
       />
     </Card>
   );
