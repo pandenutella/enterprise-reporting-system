@@ -3,8 +3,8 @@ import Head from "next/head";
 import Footer from "./Footer";
 import Header from "./Header";
 
-const PageLayout = ({ children }) => (
-  <Layout style={{ minWidth: "750px" }}>
+const AppLayout = ({ children }) => (
+  <Layout style={{ minWidth: "1040px" }}>
     <Head>
       <title>Enterprise Reporting System</title>
     </Head>
@@ -13,8 +13,7 @@ const PageLayout = ({ children }) => (
       style={{
         marginTop: 64,
         minHeight: "calc(100vh - 64px - 70px)",
-        paddingTop: 20,
-        paddingBottom: 20,
+        padding: 20,
       }}
     >
       {children}
@@ -23,4 +22,4 @@ const PageLayout = ({ children }) => (
   </Layout>
 );
 
-export default PageLayout;
+export default AppLayout;

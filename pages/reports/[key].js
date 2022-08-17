@@ -46,7 +46,7 @@ const ReportPage = ({
             </Breadcrumb.Item>
           </Breadcrumb>
           <Row gutter={[20, 20]}>
-            <Col flex="650px">
+            <Col flex="660px">
               <ReportForm
                 reportKey={key}
                 report={report}
@@ -54,7 +54,7 @@ const ReportPage = ({
                 onSubmit={handleSubmit}
               />
             </Col>
-            <Col flex="350px">
+            <Col flex="360px">
               <ReportSubmissions
                 reportSubmissions={reportSubmissions}
                 fetching={fetching}

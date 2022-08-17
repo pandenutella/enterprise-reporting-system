@@ -1,10 +1,10 @@
 import "antd/dist/antd.css";
-import PageLayout from "../components/layout/PageLayout";
+import AppLayout from "../components/layout/AppLayout";
 
 const App = ({ Component, pageProps }) => (
-  <PageLayout>
+  <AppLayout>
     <Component {...pageProps} />
-  </PageLayout>
+  </AppLayout>
 );
 
 export default App;

@@ -67,14 +67,14 @@ const ReportsPage = ({
           <Breadcrumb.Item>Reports</Breadcrumb.Item>
         </Breadcrumb>
         <Row gutter={[20, 20]}>
-          <Col flex="650px">
+          <Col flex="660px">
             <Space direction="vertical" style={{ width: "100%" }}>
               <ReportFilter filter={filter} onFilter={setFilter} />
               {renderRecent()}
               {renderResults()}
             </Space>
           </Col>
-          <Col flex="350px">
+          <Col flex="360px">
             <ReportSubmissions
               reportSubmissions={reportSubmissions}
               fetching={fetching}
