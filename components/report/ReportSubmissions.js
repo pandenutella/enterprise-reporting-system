@@ -9,7 +9,11 @@ const ReportSubmissions = ({ reportSubmissions, fetching }) => {
   }));
 
   return (
-    <Card title="Report Submissions" size="small">
+    <Card
+      title="Report Submissions"
+      size="small"
+      bodyStyle={{ overflowY: "auto", maxHeight: "calc(100vh - 254px)" }}
+    >
       <List
         dataSource={dataSource}
         renderItem={(reportSubmission) => (
