@@ -1,7 +1,8 @@
-import { Breadcrumb, Col, Row, Space } from "antd";
+import { Space } from "antd";
 import axios from "axios";
 import { useState } from "react";
 import api from "../../axios";
+import PageLayout from "../../components/layout/PageLayout";
 import ReportFilter from "../../components/report/ReportFilter";
 import ReportGroup from "../../components/report/ReportGroup";
 import ReportGroups from "../../components/report/ReportGroups";
@@ -9,6 +10,8 @@ import ReportSubmissions from "../../components/report/ReportSubmissions";
 import NoReportsResult from "../../components/result/NoReportsResult";
 import useAutoRefresh from "../../hooks/useAutoRefresh";
 import useReportSubmissions from "../../hooks/useReportSubmissions";
+
+const breadcrumbs = [{ label: "Reports" }];
 
 const ReportsPage = ({
   reportGroups,
@@ -60,30 +63,22 @@ const ReportsPage = ({
   };
 
   return (
-    <Row>
-      <Col flex="auto" />
-      <Col flex="1000px">
-        <Breadcrumb style={{ marginBottom: 10 }}>
-          <Breadcrumb.Item>Reports</Breadcrumb.Item>
-        </Breadcrumb>
-        <Row gutter={[20, 20]}>
-          <Col flex="660px">
-            <Space direction="vertical" style={{ width: "100%" }}>
-              <ReportFilter filter={filter} onFilter={setFilter} />
-              {renderRecent()}
-              {renderResults()}
-            </Space>
-          </Col>
-          <Col flex="360px">
-            <ReportSubmissions
-              reportSubmissions={reportSubmissions}
-              fetching={fetching}
-            />
-          </Col>
-        </Row>
-      </Col>
-      <Col flex="auto" />
-    </Row>
+    <PageLayout
+      breadcrumbs={breadcrumbs}
+      center={
+        <Space direction="vertical" style={{ width: "100%" }}>
+          <ReportFilter filter={filter} onFilter={setFilter} />
+          {renderRecent()}
+          {renderResults()}
+        </Space>
+      }
+      right={
+        <ReportSubmissions
+          reportSubmissions={reportSubmissions}
+          fetching={fetching}
+        />
+      }
+    />
   );
 };
 
