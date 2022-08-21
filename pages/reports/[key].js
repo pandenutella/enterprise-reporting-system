@@ -35,8 +35,10 @@ const ReportPage = ({
     templates,
     fetching: templatesFetching,
     saving: templateSaving,
+    updating: templateUpdating,
     fetch: fetchTemplates,
     save: saveTemplate,
+    update: updateTemplate,
   } = useReportTemplates();
 
   useAutoRefresh(() => fetchSubmissions());
@@ -65,7 +67,7 @@ const ReportPage = ({
     reportForm.current.setFieldsValue(template.parameters);
   };
 
-  const handleTemplateSave = async ({ name }) => {
+  const handleTemplateSave = async (name) => {
     if (!reportForm.current) return;
 
     try {
@@ -86,6 +88,30 @@ const ReportPage = ({
         templateForm.current.setFieldValue("selected", template._id);
         message.success(
           `Template "${template.name}" has been saved successfully.`
+        );
+      });
+    } catch (error) {}
+  };
+
+  const handleTemplateUpdate = async (_id, name) => {
+    if (!reportForm.current) return;
+
+    try {
+      const values = await reportForm.current.validateFields();
+
+      const templateRequest = {
+        name,
+        parameters: {
+          event: values.event,
+          date: values.date,
+          remarks: values.remarks ?? null,
+          withNegative: values.withNegative,
+        },
+      };
+
+      updateTemplate(_id, templateRequest, (template) => {
+        message.success(
+          `Template "${template.name}" has been updated successfully.`
         );
       });
     } catch (error) {}
@@ -120,8 +146,10 @@ const ReportPage = ({
               templates={templates}
               fetching={templatesFetching}
               saving={templateSaving}
+              updating={templateUpdating}
               onTemplateChange={handleTemplateChange}
               onTemplateSave={handleTemplateSave}
+              onTemplateUpdate={handleTemplateUpdate}
             />
           </Col>
           <Col span={24}>

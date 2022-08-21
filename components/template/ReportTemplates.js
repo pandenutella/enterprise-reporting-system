@@ -7,10 +7,14 @@ const ReportTemplates = ({
   templates,
   fetching,
   saving,
+  updating,
   onTemplateChange,
   onTemplateSave,
+  onTemplateUpdate,
 }) => {
+  const [selected, setSelected] = useState();
   const [name, setName] = useState();
+  const [action, setAction] = useState();
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -18,33 +22,64 @@ const ReportTemplates = ({
   }, []);
 
   const handleFieldsChange = ([field]) => {
+    const { value } = field;
+
     switch (field.name[0]) {
       case "selected":
-        const template = templates.find((t) => t._id === field.value);
+        setSelected(value);
 
-        if (template) form.setFieldValue("name", template.name);
-        else form.resetFields();
+        if (!value) {
+          form.resetFields();
 
-        setName(template?.name);
+          return;
+        }
+
+        const template = templates.find((t) => t._id === value);
+
+        setName(template.name);
+        form.setFieldValue("name", template.name);
+
         onTemplateChange(template);
+
         break;
       case "name":
-        setName(field.value);
+        setName(value);
+
         break;
       default:
         break;
     }
   };
 
-  const handleSave = (values) => onTemplateSave(values);
+  const handleSave = () => {
+    setAction("save");
+    form.submit();
+  };
+
+  const handleUpdate = () => {
+    setAction("update");
+    form.submit();
+  };
+
+  const handleProcess = ({ selected, name }) => {
+    if (!["save", "update"].includes(action)) return;
+
+    if (action === "update") {
+      onTemplateUpdate(selected, name);
+
+      return;
+    }
+
+    onTemplateSave(name);
+  };
 
   return (
     <Card title="Template" size="small" loading={fetching}>
       <Form
         form={form}
         layout="vertical"
+        onFinish={handleProcess}
         onFieldsChange={handleFieldsChange}
-        onFinish={handleSave}
       >
         <Form.Item name="selected" label="Selected">
           <TemplateSelect templates={templates} />
@@ -58,13 +93,23 @@ const ReportTemplates = ({
         </Form.Item>
         <Space style={{ float: "right" }}>
           <Button
-            type="primary"
-            htmlType="submit"
+            type={selected ? "outlined" : "primary"}
             loading={saving}
-            disabled={saving || !name}
+            disabled={!name || saving || updating}
+            onClick={handleSave}
           >
-            Save
+            Save {selected && "as New"}
           </Button>
+          {selected && (
+            <Button
+              type="primary"
+              loading={updating}
+              disabled={saving || updating}
+              onClick={handleUpdate}
+            >
+              Update
+            </Button>
+          )}
         </Space>
       </Form>
     </Card>

@@ -6,6 +6,7 @@ const useReportTemplates = () => {
   const [templates, setTemplates] = useState([]);
   const [fetching, setFetching] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [updating, setUpdating] = useState(false);
 
   const fetch = (reportKey) => {
     setFetching(true);
@@ -33,12 +34,31 @@ const useReportTemplates = () => {
       .finally(() => setSaving(false));
   };
 
+  const update = (_id, templateRequest, onSuccess) => {
+    setUpdating(true);
+
+    api
+      .patch(`/report-templates/${_id}`, templateRequest)
+      .then(({ data: template }) => {
+        setTemplates((templates) =>
+          templates
+            .map((t) => (t._id === template._id ? template : t))
+            .sort(sortObjectsByProperty("name"))
+        );
+
+        onSuccess(template);
+      })
+      .finally(() => setUpdating(false));
+  };
+
   return {
     templates,
     fetching,
     saving,
+    updating,
     fetch,
     save,
+    update,
   };
 };
 
