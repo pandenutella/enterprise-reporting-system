@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import api from "../axios";
 
-const useReportSubmissions = (initialValue) => {
-  const [reportSubmissions, setReportSubmissions] = useState([]);
+const useReportSubmissions = (initialSubmissions) => {
+  const [submissions, setSubmissions] = useState([]);
   const [fetching, setFetching] = useState(false);
 
   const fetch = () => {
@@ -10,20 +10,17 @@ const useReportSubmissions = (initialValue) => {
 
     api
       .get("/report-submissions", { params: { userId: "PDN" } })
-      .then((response) => setReportSubmissions(response.data))
+      .then(({ data }) => setSubmissions(data))
       .finally(setFetching(false));
   };
 
   const add = (reportSubmission) => {
-    setReportSubmissions((previousState) => [
-      reportSubmission,
-      ...previousState,
-    ]);
+    setSubmissions((previousState) => [reportSubmission, ...previousState]);
   };
 
   useEffect(() => {
-    if (initialValue) {
-      setReportSubmissions(initialValue);
+    if (initialSubmissions) {
+      setSubmissions(initialSubmissions);
 
       return;
     }
@@ -32,7 +29,7 @@ const useReportSubmissions = (initialValue) => {
   }, []);
 
   return {
-    reportSubmissions,
+    submissions,
     fetching,
     fetch,
     add,

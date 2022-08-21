@@ -25,7 +25,9 @@ const renderBreadcrumbs = (breadcrumbs) => {
   return (
     <Breadcrumb style={{ marginBottom: 10 }}>
       {breadcrumbs.map((breadcrumb) => (
-        <Breadcrumb.Item>{renderBreadcrumb(breadcrumb)}</Breadcrumb.Item>
+        <Breadcrumb.Item key={breadcrumb.label}>
+          {renderBreadcrumb(breadcrumb)}
+        </Breadcrumb.Item>
       ))}
     </Breadcrumb>
   );

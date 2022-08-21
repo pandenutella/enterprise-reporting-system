@@ -1,5 +1,5 @@
 import { Button, Card, Col, Form, message, Row, Space, Typography } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../../axios";
 import ReportNotFoundResult from "../result/ReportNotFoundResult";
 import ReportUnderDevelopmentResult from "../result/ReportUnderDevelopmentResult";
@@ -66,8 +66,13 @@ const getReportDisplayName = (key, report, reportGroup) => {
   );
 };
 
-const ReportForm = ({ reportKey, report, reportGroup, onSubmit }) => {
+const ReportForm = ({ formRef, reportKey, report, reportGroup, onSubmit }) => {
   const [submitting, setSubmitting] = useState(false);
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    formRef.current = form;
+  }, []);
 
   if (!report)
     return (
@@ -91,10 +96,7 @@ const ReportForm = ({ reportKey, report, reportGroup, onSubmit }) => {
 
     api
       .post("/report-submissions", reportSubmissionRequest)
-      .then((response) => {
-        const reportSubmission = response.data;
-        console.log(reportSubmission);
-
+      .then(({ data: reportSubmission }) => {
         message.success(
           `Your ${reportKey} report has been submitted successfully with key "${reportSubmission.key}".`
         );
@@ -110,7 +112,7 @@ const ReportForm = ({ reportKey, report, reportGroup, onSubmit }) => {
   };
 
   return (
-    <Form layout="vertical" onFinish={handleSubmit}>
+    <Form form={form} layout="vertical" onFinish={handleSubmit}>
       <Card
         title={getReportDisplayName(reportKey, report, reportGroup)}
         size="small"

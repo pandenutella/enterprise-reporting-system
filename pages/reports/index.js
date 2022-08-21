@@ -17,11 +17,11 @@ const ReportsPage = ({
   reportGroups,
   reports,
   recentReports,
-  reportSubmissions: reportSubmissionsProp,
+  submissions: submissionsServerProp,
 }) => {
   const [filter, setFilter] = useState("");
-  const { reportSubmissions, fetching, fetch } = useReportSubmissions(
-    reportSubmissionsProp
+  const { submissions, fetching, fetch } = useReportSubmissions(
+    submissionsServerProp
   );
   useAutoRefresh(() => fetch());
 
@@ -73,10 +73,7 @@ const ReportsPage = ({
         </Space>
       }
       right={
-        <ReportSubmissions
-          reportSubmissions={reportSubmissions}
-          fetching={fetching}
-        />
+        <ReportSubmissions submissions={submissions} fetching={fetching} />
       }
     />
   );
@@ -86,10 +83,10 @@ export const getServerSideProps = async () => {
   const userId = "PDN";
 
   const [
-    reportGroupsResponse,
-    reportsResponse,
-    recentReportKeysResponse,
-    reportSubmissionsResponse,
+    { data: reportGroups },
+    { data: reports },
+    { data: recentReportKeys },
+    { data: submissions },
   ] = await axios.all([
     api.get("/report-groups"),
     api.get("/reports"),
@@ -99,22 +96,16 @@ export const getServerSideProps = async () => {
     api.get("/report-submissions", { params: { userId } }),
   ]);
 
-  const reportGroups = reportGroupsResponse.data;
-  const reports = reportsResponse.data;
-
-  const recentReportKeys = recentReportKeysResponse.data;
   const recentReports = recentReportKeys.map((reportKey) =>
     reports.find((report) => report.key === reportKey)
   );
-
-  const reportSubmissions = reportSubmissionsResponse.data;
 
   return {
     props: {
       reportGroups,
       reports,
       recentReports,
-      reportSubmissions,
+      submissions,
     },
   };
 };

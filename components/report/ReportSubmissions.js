@@ -2,8 +2,8 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { Card, List } from "antd";
 import moment from "moment";
 
-const ReportSubmissions = ({ reportSubmissions, fetching }) => {
-  const dataSource = reportSubmissions.map((reportSubmission) => ({
+const ReportSubmissions = ({ submissions, fetching }) => {
+  const dataSource = submissions.map((reportSubmission) => ({
     ...reportSubmission,
     key: reportSubmission.key,
   }));
@@ -12,7 +12,7 @@ const ReportSubmissions = ({ reportSubmissions, fetching }) => {
     <Card
       title="Report Submissions"
       size="small"
-      bodyStyle={{ overflowY: "auto", maxHeight: "calc(100vh - 254px)" }}
+      bodyStyle={{ overflowY: "auto", maxHeight: "385px" }}
     >
       <List
         dataSource={dataSource}
