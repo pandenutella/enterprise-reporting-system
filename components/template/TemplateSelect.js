@@ -12,7 +12,7 @@ const TemplateSelect = ({ templates, value, onChange }) => {
       onChange={onChange}
       options={options}
       allowClear
-      notFoundContent="No template for this report yet"
+      notFoundContent="No saved templates"
     />
   );
 };

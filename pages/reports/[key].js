@@ -26,8 +26,9 @@ const ReportPage = ({
   const {
     submissions,
     fetching: submissionsFetching,
+    submitting,
     fetch: fetchSubmissions,
-    add,
+    submit: submitReport,
   } = useReportSubmissions(reportSubmissionsProp);
 
   const {
@@ -44,7 +45,13 @@ const ReportPage = ({
 
   useEffect(() => fetchTemplates(report.key), []);
 
-  const handleSubmit = (reportSubmission) => add(reportSubmission);
+  const handleSubmit = (submissionRequest) => {
+    submitReport(submissionRequest, (submission) => {
+      message.success(
+        `Your ${submissionRequest.reportKey} report has been submitted successfully with key "${submission.key}".`
+      );
+    });
+  };
 
   const handleTemplateChange = (template) => {
     if (!reportForm.current) return;
@@ -78,7 +85,7 @@ const ReportPage = ({
       saveTemplate(templateRequest, (template) => {
         templateForm.current.setFieldValue("selected", template._id);
         message.success(
-          `Your ${template.name} template has been saved successfully.`
+          `Template "${template.name}" has been saved successfully.`
         );
       });
     } catch (error) {}
@@ -101,6 +108,7 @@ const ReportPage = ({
           reportKey={key}
           report={report}
           reportGroup={reportGroup}
+          submitting={submitting}
           onSubmit={handleSubmit}
         />
       }

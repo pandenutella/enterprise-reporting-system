@@ -1,6 +1,5 @@
-import { Button, Card, Col, Form, message, Row, Space, Typography } from "antd";
-import { useEffect, useState } from "react";
-import api from "../../axios";
+import { Button, Card, Col, Form, Row, Space, Typography } from "antd";
+import { useEffect } from "react";
 import ReportNotFoundResult from "../result/ReportNotFoundResult";
 import ReportUnderDevelopmentResult from "../result/ReportUnderDevelopmentResult";
 import DynamicIcon from "./DynamicIcon";
@@ -66,8 +65,14 @@ const getReportDisplayName = (key, report, reportGroup) => {
   );
 };
 
-const ReportForm = ({ formRef, reportKey, report, reportGroup, onSubmit }) => {
-  const [submitting, setSubmitting] = useState(false);
+const ReportForm = ({
+  formRef,
+  reportKey,
+  report,
+  reportGroup,
+  submitting,
+  onSubmit,
+}) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -82,8 +87,6 @@ const ReportForm = ({ formRef, reportKey, report, reportGroup, onSubmit }) => {
     );
 
   const handleSubmit = (values) => {
-    setSubmitting(true);
-
     const reportSubmissionRequest = {
       reportKey,
       parameters: {
@@ -94,15 +97,7 @@ const ReportForm = ({ formRef, reportKey, report, reportGroup, onSubmit }) => {
       },
     };
 
-    api
-      .post("/report-submissions", reportSubmissionRequest)
-      .then(({ data: reportSubmission }) => {
-        message.success(
-          `Your ${reportKey} report has been submitted successfully with key "${reportSubmission.key}".`
-        );
-        onSubmit(reportSubmission);
-      })
-      .finally(() => setSubmitting(false));
+    onSubmit(reportSubmissionRequest);
   };
 
   const renderContent = () => {
